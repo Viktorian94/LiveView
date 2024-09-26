@@ -127,7 +127,7 @@ export function PostList({ filter }: PostListProps) {
                 <Image
                   src={post.authorProfileImageUrl}
                   alt={post.authorName}
-                  className="mr-2 size-10 rounded-full"
+                  className="mr-2 rounded-full"
                   width={40}
                   height={40}
                 />
@@ -147,20 +147,24 @@ export function PostList({ filter }: PostListProps) {
                 Delete
               </button>
             )}
+            <p className="mt-2">{post.content}</p>
             {post.imageUrl && (
               <div className="mt-2">
                 <Image
                   src={post.imageUrl}
                   alt={post.title}
                   className="h-auto max-w-full"
-                  width={600}
-                  height={400}
+                  width={300}
+                  height={200}
                 />
               </div>
             )}
-            <p className="mt-2">{post.content}</p>
+
             <p className="mt-2 text-sm text-gray-500">
-              Date of creation: {post.createdAt.toDate().toLocaleString()}
+              Date of creation:{" "}
+              {post.createdAt
+                ? post.createdAt.toDate().toLocaleString()
+                : "Just now"}
             </p>
             <div className="mt-2 flex items-center">
               <button

@@ -15,7 +15,7 @@ interface ModalPostProps {
 }
 
 export function ModalPost({ isOpen, onClose, onPostCreated }: ModalPostProps) {
-  const { currentUser } = useAuth();
+  const { currentUser, userData } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
 
   const {
@@ -46,13 +46,16 @@ export function ModalPost({ isOpen, onClose, onPostCreated }: ModalPostProps) {
         imageUrl = await getDownloadURL(snapshot.ref);
       }
 
+      const authorProfileImageUrl = userData?.profileImageUrl || null;
+      const authorName = userData?.nickname || currentUser.email;
+
       await addDoc(collection(firestore, "posts"), {
         title: data.title,
         content: data.content,
         imageUrl: imageUrl,
         authorId: currentUser.uid,
-        authorName: data.user?.nickname || currentUser.email,
-        authorProfileImageUrl: data.user?.profileImageUrl || null,
+        authorName: authorName,
+        authorProfileImageUrl: authorProfileImageUrl,
         createdAt: serverTimestamp(),
         likes: 0,
         likedBy: [],
