@@ -1,5 +1,6 @@
 "use client";
 
+import { Icons } from "@/components/icons";
 import { useAuth } from "@/contexts/AuthContext";
 import { auth } from "@/lib/firebaseConfig";
 import { signOut } from "firebase/auth";
@@ -8,7 +9,11 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export default function Header() {
+interface HeaderProps {
+  onToggleSidebar: () => void;
+}
+
+export default function Header({ onToggleSidebar }: HeaderProps) {
   const { currentUser, userData } = useAuth();
   const router = useRouter();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -28,19 +33,30 @@ export default function Header() {
   };
 
   return (
-    <header>
-      <div className="flex items-center justify-between bg-lime-100 px-8">
-        <Link className="text-3xl text-cyan-700 hover:text-cyan-950" href={"/"}>
-          LiveView
-        </Link>
-        <div className="relative py-5">
+    <header className="bg-lime-100 px-4 md:px-8">
+      <div className="flex items-center justify-between py-4">
+        <div className="flex items-center">
+          {/* Кнопка для открытия сайдбара на мобильных устройствах */}
+          <div className="mr-4 md:hidden">
+            <button onClick={onToggleSidebar} className="flex items-center">
+              <Icons.burgerMunu className="size-6" />
+            </button>
+          </div>
+          <Link
+            className="text-2xl font-bold text-cyan-700 hover:text-cyan-950"
+            href={"/"}
+          >
+            LiveView
+          </Link>
+        </div>
+        <div className="relative">
           {currentUser ? (
             <div className="flex items-center">
               <div className="relative">
                 <Image
                   src={userData?.profileImageUrl || "/logo.webp"}
-                  width={20}
-                  height={20}
+                  width={40}
+                  height={40}
                   alt="Avatar"
                   className="size-10 cursor-pointer rounded-full"
                   onClick={toggleDropdown}
@@ -64,15 +80,15 @@ export default function Header() {
               </div>
             </div>
           ) : (
-            <div>
+            <div className="flex space-x-2">
               <Link
-                className="mx-2 rounded-2xl bg-cyan-300 px-5 py-3 hover:bg-cyan-600"
+                className="rounded-2xl bg-cyan-300 px-4 py-2 text-sm hover:bg-cyan-600 md:px-5 md:py-3"
                 href="/sign-in"
               >
                 Sign In
               </Link>
               <Link
-                className="rounded-2xl bg-cyan-300 px-5 py-3 hover:bg-cyan-600"
+                className="rounded-2xl bg-cyan-300 px-4 py-2 text-sm hover:bg-cyan-600 md:px-5 md:py-3"
                 href="/sign-up"
               >
                 Sign Up
