@@ -1,5 +1,6 @@
 "use client";
 
+import { Icons } from "@/components/icons";
 import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
 
@@ -7,12 +8,14 @@ interface SidebarProps {
   onOpenModal: () => void;
   activeFilter: string;
   setActiveFilter: (filter: string) => void;
+  onToggleSidebar: () => void;
 }
 
 export function Sidebar({
   onOpenModal,
   activeFilter,
   setActiveFilter,
+  onToggleSidebar,
 }: SidebarProps) {
   const { currentUser } = useAuth();
 
@@ -24,12 +27,19 @@ export function Sidebar({
 
   return (
     <div className="w-64 border-r bg-white p-4">
+      <div className="mb-4 md:hidden">
+        <button onClick={onToggleSidebar} className="flex items-center">
+          <Icons.arrowLeft className="size-6" />
+          <span className="ml-2">Close</span>
+        </button>
+      </div>
       <button
         className="mb-4 w-full rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
         onClick={onOpenModal}
         disabled={!currentUser}
+        style={{ height: "50px" }}
       >
-        Greate Post
+        Create Post
       </button>
       <ul>
         {filters.map((filter) => {
@@ -46,7 +56,6 @@ export function Sidebar({
                     : "hover:bg-gray-100"
                 )}
                 onClick={() => {
-                  console.log(`Changing filter to: ${filter.value}`);
                   setActiveFilter(filter.value);
                 }}
               >

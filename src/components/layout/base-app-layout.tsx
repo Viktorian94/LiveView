@@ -13,6 +13,7 @@ interface BaseAppLayoutProps {
 export function BaseAppLayout({ children }: BaseAppLayoutProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState("latest");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -26,17 +27,23 @@ export function BaseAppLayout({ children }: BaseAppLayoutProps) {
     setIsModalOpen(false);
   };
 
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
   return (
     <div className="flex h-screen flex-col">
-      <Header />
+      <Header onToggleSidebar={toggleSidebar} />
       <div className="flex flex-1">
-        <Sidebar
-          onOpenModal={handleOpenModal}
-          activeFilter={activeFilter}
-          setActiveFilter={setActiveFilter}
-        />
-        <main className="flex-1">
-          {React.cloneElement(children as React.ReactElement, { activeFilter })}
+        {isSidebarOpen && (
+          <Sidebar
+            onOpenModal={handleOpenModal}
+            activeFilter={activeFilter}
+            setActiveFilter={setActiveFilter}
+            onToggleSidebar={toggleSidebar}
+          />
+        )}
+        <main className="flex-1 overflow-y-auto">
           <PostList filter={activeFilter} />
         </main>
       </div>
